@@ -62,4 +62,19 @@ public class GoldenuserserviceController {
 		}
 		return response;
 	}
+	
+	@GetMapping("/hello")
+	public ResponseEntity<Object> hello()
+	{
+		MultiValueMap<String, String> multiValueMap = new LinkedMultiValueMap<String, String>();
+		multiValueMap.add("message", "Hi from Hello");
+		multiValueMap.add("status", "200");
+		multiValueMap.add("data", "There is no problem");
+		multiValueMap.add("Content-Type", MediaType.APPLICATION_JSON_VALUE);
+        String successMessage = multiValueMap.getFirst("message");
+        ResponseEntity<Object> response = new ResponseEntity<Object>(successMessage, multiValueMap, HttpStatus.OK);
+        
+        return response;
+	}
+
 }
