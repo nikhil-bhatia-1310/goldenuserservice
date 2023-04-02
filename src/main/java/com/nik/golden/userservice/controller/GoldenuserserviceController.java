@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cloud.netflix.eureka.EurekaInstanceConfigBean;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -23,12 +24,12 @@ public class GoldenuserserviceController {
 	@Autowired
 	GoldenuserserviceControllerService service;
 	
+	@Autowired
+	EurekaInstanceConfigBean eurekaConfigBean;
+	
 	@GetMapping("/status/check")
 	public ResponseEntity<Object> status()
 	{
-		GoldenuserserviceModel model = new GoldenuserserviceModel();
-		model.setId(1);
-		model.setName("Golden User Model Name");
 		ResponseEntity<Object> response = null;
 		try 
 		{
@@ -66,13 +67,11 @@ public class GoldenuserserviceController {
 	@GetMapping("/hello")
 	public ResponseEntity<Object> hello()
 	{
-		MultiValueMap<String, String> multiValueMap = new LinkedMultiValueMap<String, String>();
-		multiValueMap.add("message", "Hi from Hello");
-		multiValueMap.add("status", "200");
-		multiValueMap.add("data", "There is no problem");
-		multiValueMap.add("Content-Type", MediaType.APPLICATION_JSON_VALUE);
-        String successMessage = multiValueMap.getFirst("message");
-        ResponseEntity<Object> response = new ResponseEntity<Object>(successMessage, multiValueMap, HttpStatus.OK);
+		GoldenuserserviceModel model = new GoldenuserserviceModel();
+		model.setId(1);
+		model.setName("Golden User Model Name" +eurekaConfigBean.getInstanceId());
+
+        ResponseEntity<Object> response = new ResponseEntity<Object>(model, HttpStatus.OK);
         
         return response;
 	}
