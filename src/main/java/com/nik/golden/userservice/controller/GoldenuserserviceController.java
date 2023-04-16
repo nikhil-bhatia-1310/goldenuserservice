@@ -1,6 +1,8 @@
 package com.nik.golden.userservice.controller;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,15 +12,18 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestClientException;
 
+import com.nik.golden.userservice.model.EmployeeModel;
 import com.nik.golden.userservice.model.GoldenuserserviceModel;
 
 @RestController
 @RequestMapping("/goldenusers")
+@CrossOrigin("http://localhost:3000/")
 public class GoldenuserserviceController {
 
 	@Autowired
@@ -76,4 +81,22 @@ public class GoldenuserserviceController {
         return response;
 	}
 
+	@GetMapping("/users")
+	public ResponseEntity<Object> getUsers()
+	{
+		List<EmployeeModel> userList = new ArrayList<EmployeeModel>();
+		
+		userList.add(new EmployeeModel(1, "Nikhil", "Bhatia", "nik@email.com"));
+		userList.add(new EmployeeModel(1, "n", "Bhatia", "nik@email.com"));
+		userList.add(new EmployeeModel(1, "Nl", "Bhatia", "Nl@email.com"));
+		userList.add(new EmployeeModel(1, "Nil", "Bhatia", "Nil@email.com"));
+		userList.add(new EmployeeModel(1, "ikh", "Bhatia", "ikh@email.com"));
+		userList.add(new EmployeeModel(1, "Nhil", "Bhatia", "Nhil@e111mail.com"));
+		userList.add(new EmployeeModel(1, "hil", "Bhatia", "hil@email.com"));
+		
+        ResponseEntity<Object> response = new ResponseEntity<Object>(userList, HttpStatus.OK);
+        
+        return response;
+	}
+	
 }
