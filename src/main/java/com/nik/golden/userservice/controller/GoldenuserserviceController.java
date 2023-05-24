@@ -21,6 +21,8 @@ import org.springframework.web.client.RestClientException;
 import com.nik.golden.userservice.model.EmployeeModel;
 import com.nik.golden.userservice.model.GoldenuserserviceModel;
 
+import io.github.resilience4j.ratelimiter.annotation.RateLimiter;
+
 @RestController
 @RequestMapping("/goldenusers")
 @CrossOrigin("http://localhost:3000/")
@@ -70,6 +72,7 @@ public class GoldenuserserviceController {
 	}
 	
 	@GetMapping("/hello")
+	@RateLimiter(name = "userRateLimiter", fallbackMethod = "fallback")
 	public ResponseEntity<Object> hello()
 	{
 		GoldenuserserviceModel model = new GoldenuserserviceModel();
@@ -80,7 +83,16 @@ public class GoldenuserserviceController {
         
         return response;
 	}
+	
+	public ResponseEntity<Object> fallback()
+	{
+		GoldenuserserviceModel model = new GoldenuserserviceModel();
+		model.setName("Golden User Rate Limited" +eurekaConfigBean.getInstanceId());
 
+        ResponseEntity<Object> response = new ResponseEntity<Object>(model, HttpStatus.OK);
+		return response;
+	}
+	
 	@GetMapping("/users")
 	public ResponseEntity<Object> getUsers()
 	{
