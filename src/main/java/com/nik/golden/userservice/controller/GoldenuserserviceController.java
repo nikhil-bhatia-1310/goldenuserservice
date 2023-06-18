@@ -6,6 +6,8 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.cloud.context.config.annotation.RefreshScope;
 import org.springframework.cloud.netflix.eureka.EurekaInstanceConfigBean;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -22,10 +24,18 @@ import com.nik.golden.userservice.model.EmployeeModel;
 import com.nik.golden.userservice.model.GoldenuserserviceModel;
 
 import io.github.resilience4j.ratelimiter.annotation.RateLimiter;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.tags.Tag;
 
+@Tag(
+		name = "Golden Users APIs",
+		description = "Multiple functions for users"
+	)
 @RestController
 @RequestMapping("/goldenusers")
 @CrossOrigin("http://localhost:3000/")
+@RefreshScope
 public class GoldenuserserviceController {
 
 	@Autowired
@@ -34,6 +44,17 @@ public class GoldenuserserviceController {
 	@Autowired
 	EurekaInstanceConfigBean eurekaConfigBean;
 	
+	@Value("${spring.boot.message}")
+	private String message;
+	
+	@Operation(
+				summary = "Status check API",
+				description = "Check the status of the API"
+			)
+	@ApiResponse(
+				responseCode = "200",
+				description = "HTTP status code OK"
+			)
 	@GetMapping("/status/check")
 	public ResponseEntity<Object> status()
 	{
@@ -106,6 +127,7 @@ public class GoldenuserserviceController {
 		userList.add(new EmployeeModel(1, "Nhil", "Bhatia", "Nhil@e111mail.com"));
 		userList.add(new EmployeeModel(1, "hil", "Bhatia", "hil@email.com"));
 		
+		System.out.println("message:"+message);
         ResponseEntity<Object> response = new ResponseEntity<Object>(userList, HttpStatus.OK);
         
         return response;
